@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pokedex</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="pokedex">
+        <div class="screen">
+            <h1>POKEDEX</h1>
+
+            <div class="search-box">
+                <form method="get" action="/">
+                    <select name="gen" onchange="this.form.submit()">
+                        {% for id, nombre in gens.items() %}
+                        <option value="{{ id }}" {% if id==gen_actual %}selected{% endif %}>
+                            Gen {{ id }} - {{ nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </form>
+
+                <form method="post" action="/buscar">
+                    <input type="hidden" name="gen" value="{{ gen_actual }}">
+                    <input type="text" name="query" placeholder="Nombre o número">
+                    <button>Buscar</button>
+                </form>
+            </div>
+
+            <div class="list">
+                <ul>
+                    {% for p in pokedex %}
+                    <li>
+                        <a href="{{ url_for('pokemon', numero=p['id']) }}">
+                            {{ p["id"] }} - {{ p["name"] }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="pokedex-controls">
+            <div class="d-pad">
+                <div class="up"></div>
+                <div class="right"></div>
+                <div class="down"></div>
+                <div class="left"></div>
+                <div class="center"></div>
+            </div>
+            <div class="extra-buttons">
+                <div class="btn-long"></div>
+                <div class="btn-green"></div>
+            </div>
+            <div class="lights-row">
+                <div class="light red"></div>
+                <div class="light yellow"></div>
+                <div class="light green"></div>
+            </div>
+        </div>
+
+</body>
+
+</html>

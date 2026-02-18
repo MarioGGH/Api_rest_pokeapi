@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ pokemon.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/shiny.js') }}" defer></script>
+</head>
+
+<body>
+
+    <div class="pokedex">
+        <div class="screen">
+            <h1>{{ pokemon.name }}</h1>
+
+            <div class="top">
+                <div class="navigation-container">
+                    {% if anterior %}
+                    <a href="{{ url_for('pokemon', numero=anterior) }}" class="nav-btn">&lt;</a>
+                    {% else %}
+                    <div class="nav-btn disabled">&lt;</div>
+                    {% endif %}
+
+                    <div class="image-box" style="position: relative;">
+                        <div id="shiny-toggle" class="shiny-icon" title="Ver versión Shiny">
+                            ✨
+                        </div>
+
+                        <img id="pokemon-sprite" src="{{ pokemon.sprites.front_default }}"
+                            data-normal="{{ pokemon.sprites.front_default }}"
+                            data-shiny="{{ pokemon.sprites.front_shiny }}">
+                    </div>
+
+                    {% if siguiente %}
+                    <a href="{{ url_for('pokemon', numero=siguiente) }}" class="nav-btn">&gt;</a>
+                    {% else %}
+                    <div class="nav-btn disabled">&gt;</div>
+                    {% endif %}
+                </div>
+
+                <div class="info">
+                    <p>ID: {{ pokemon.id }}</p>
+                    <p>Altura: {{ pokemon.height / 10 }} m</p>
+                    <p>Peso: {{ pokemon.weight / 10 }} kg</p>
+
+                    <div class="section-title">Tipos</div>
+                    <ul>
+                        {% for t in pokemon.types %}
+                        <li>{{ t.type.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-title">Habilidades</div>
+            <ul>
+                {% for h in pokemon.abilities %}
+                <li>{{ h.ability.name }}</li>
+                {% endfor %}
+            </ul>
+
+            <div class="section-title">Estadísticas</div>
+            <ul class="stats">
+                {% for s in pokemon.stats %}
+                <li>
+                    {{ s.stat.name }}
+                    <div class="bar">
+                        {% set porcentaje = (s.base_stat / 2) | int %}
+                        <span style="width: {{ porcentaje }}%;"></span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <div class="back">
+                <a href="{{ url_for('index') }}">Volver</a>
+            </div>
+        </div>
+        <div class="pokedex-controls">
+            <div class="d-pad">
+                <div class="up"></div>
+                <div class="right"></div>
+                <div class="down"></div>
+                <div class="left"></div>
+                <div class="center"></div>
+            </div>
+            <div class="extra-buttons">
+                <div class="btn-long"></div>
+                <div class="btn-green"></div>
+            </div>
+            <div class="lights-row">
+                <div class="light red"></div>
+                <div class="light yellow"></div>
+                <div class="light green"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
