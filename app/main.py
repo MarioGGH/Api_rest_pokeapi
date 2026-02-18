@@ -21,6 +21,7 @@ GENS = {
     "9": "Paldea"
 }
 
+# Función para obtener la pokédex de una generación específica
 def obtener_pokedex_por_generacion(gen_id):
     url = f"https://pokeapi.co/api/v2/generation/{gen_id}"
     r = requests.get(url)
@@ -43,19 +44,21 @@ def obtener_pokedex_por_generacion(gen_id):
     pokemons.sort(key=lambda x: x["id"])
     return pokemons
 
+# Función para obtener la pokédex de la primera generación (151 Pokémon)
 def obtener_pokedex_gen1():
     r = requests.get(f"{API_URL}?limit={GEN1_LIMIT}&offset=0")
     if r.status_code == 200:
         return r.json()["results"]
     return []
 
-
+# Función para obtener los detalles de un Pokémon por su número
 def obtener_pokemon(numero):
     r = requests.get(f"{API_URL}/{numero}")
     if r.status_code == 200:
         return r.json()
     return None
 
+# Rutas de la aplicación
 @app.route("/")
 def index():
     gen = request.args.get("gen", "1")  
@@ -67,7 +70,7 @@ def index():
         gen_actual=gen,
         gens=GENS
     )
-
+# Ruta para manejar la búsqueda de Pokémon por nombre o número
 @app.route("/buscar", methods=["POST"])
 def buscar():
     query = request.form.get("query").lower()
@@ -87,6 +90,7 @@ def buscar():
 
     return redirect(url_for("index", gen=gen))
 
+# Ruta para mostrar los detalles de un Pokémon específico
 @app.route("/pokemon/<int:numero>")
 def pokemon(numero):
     data = obtener_pokemon(numero)
